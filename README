@@ -4,6 +4,7 @@ Update the correct values for the var.yml file
 vault_rhsm_user: <rhn_user>
 vault_rhsm_password: <rhn_password>
 vault_rhsm_pool_id: <poolid>
+
 ##############################################################################################################################
 Update the Inventory file with the correct hosts
 
