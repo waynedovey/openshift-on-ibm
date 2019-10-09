@@ -1,0 +1,7 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+172.23.13.221   ocp-vm1.syd.iic.ihost.com
+172.23.13.222   ocp-vm2.syd.iic.ihost.com
+172.23.13.223   ocp-vm3.syd.iic.ihost.com
+
+172.23.13.220   ocp-wvm1.syd.iic.ihost.com

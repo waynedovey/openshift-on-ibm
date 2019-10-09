@@ -1,0 +1,15 @@
+---
+# tasks file for roles/openshift-prep
+- name: package.yml
+  include_tasks: package.yml
+  tags: install 
+- name: update.yml
+  include_tasks: update.yml
+  tags: install 
+# - name: reboot.yml
+#   include_tasks: reboot.yml
+#   tags: install 
+- name: openshift-package.yml
+  include_tasks: openshift-package.yml
+  when: inventory_hostname == "172.23.13.221" 
+  tags: install 

@@ -1,0 +1,14 @@
+- hosts: gpu
+  vars:
+    rhsm_username: "{{ vault_rhsm_user }}"
+    rhsm_password: "{{ vault_rhsm_password }}"
+    rhsm_pool_ids: "{{ vault_rhsm_pool_id }}"
+    rhsm_repos:
+      - rhel-7-for-power-9-rpms
+      - rhel-7-for-power-9-extras-rpms
+      - rhel-7-for-power-9-optional-rpms
+      - rhel-7-server-ansible-2.6-for-power-9-rpms
+      - rhel-7-server-for-power-9-rhscl-rpms
+      - rhel-7-for-power-9-ose-3.11-rpms
+  roles:
+    - openstack.redhat-subscription

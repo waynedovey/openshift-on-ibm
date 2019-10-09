@@ -1,0 +1,128 @@
+# Create an OSEv3 group that contains the masters and nodes groups
+[OSEv3:children]
+masters
+etcd
+nodes
+
+# Set variables common for all OSEv3 hosts
+[OSEv3:vars]
+# SSH user, this user should allow ssh based auth without requiring a password
+ansible_ssh_user=root
+ansible_become=yes
+
+# OpenShift Deployment, enterprise of course!
+openshift_deployment_type=openshift-enterprise
+oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
+oreg_auth_user=7271256|ibm-cluster
+oreg_auth_password=eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiI3MDAzYWRjMDg2ZWQ0NzZjYmNkNzFkZTUyMjAyMmJmMSJ9.d2tmbVjBunw2fbtYN7L5LzBHek2kuwt1UugHOHM46jh8oqTvCI9hzse1mW38bLz12DucFbIxrtK9f0og8HTtjrpuxX2XRHsqt5j0Z1C5TnCxQ3dSjrKRw0ILZCTPhdVQGlPB5B7NAKKtajaDUkachdQBazGLMzckh_SjiwiLVB1aOO-mbQmfJrl8LvtkJe2zimT7O3Jy41QHGbg44IYqcjU8mLmSh23EywGntCbR8Tpy7oerAIb5dRQ04mhxxLmELwDOE35z9lKOmn7F8qrik_gAAcEtuxALm-nM4NsNQbOmeag4xaMxg-pJ-Wy2KqiFkJrAN_DWL2qt-PdoEtgTK0TcK_1j3YyS-GeTFzALEaWUu2ujxWgADfBlQtR43CiZtxw0nzRbHyNhzujahOif6MI86_jnW530oL-pdTP0ng5NH6X0BfpEiMgr4Pyhx4aERWa33tNrGRlCEPvCxvDfpVdevgKELpn-IfhiQ9B7q8ddWwgeaqo1ekjmdxPmyb_qCnNXFESEgKNekdY_4aDyCyw9ZuQ-I5YRZTWIvl4YoF0Tys3IlagXkrIOA2YImNx8acuoKo8CnUpDbW2tCfZY5jkDBlLrVWat2AOo9ptWz3QdiFmDGjG4he0YdO_XweZK5AILD9RE-5iNwaS3mKlC_noWHlN21b-2BkeIbrq_UyQ
+oreg_test_login=false
+openshift_clock_enabled=true
+
+openshift_certificate_expiry_warning_days=30
+openshift_release=v3.11
+openshift_image_tag=v3.11.146
+
+# Set Domain for Apps
+openshift_master_default_subdomain=syd.iic.ihost.com
+
+# default project node selector
+osm_default_node_selector='node-role.kubernetes.io/compute=true'
+
+# Native high availability cluster method with optional load balancer.
+openshift_master_cluster_hostname=ocp-vm1.syd.iic.ihost.com
+openshift_master_cluster_public_hostname=ocp-vm1.syd.iic.ihost.com
+openshift_override_hostname_check=true
+
+# Httpasswd authentication, disabled
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+openshift_master_htpasswd_users={'admin': 'redhat'}
+
+# Set networking to multi-tenant
+os_sdn_network_plugin_name='redhat/openshift-ovs-networkpolicy'
+
+# Configure SDN cluster network and kubernetes service CIDR blocks. These
+# network blocks should be private and should not conflict with network blocks
+# in your infrastructure that pods may require access to. Can not be changed
+# after deployment.
+osm_cluster_network_cidr=10.30.0.0/16
+openshift_portal_net=172.30.0.0/16
+osm_host_subnet_length=8
+
+# Disable disk and memory checks
+openshift_disable_check=disk_availability,memory_availability,docker_storage,package_availability,package_version,docker_image_availability
+
+# Deploy router
+openshift_hosted_manage_router=true
+openshift_hosted_router_selector='node-role.kubernetes.io/infra=true'
+
+# Deploy Registry
+openshift_hosted_manage_registry=true
+openshift_registry_selector='node-role.kubernetes.io/infra=true'
+openshift_hosted_registry_replicas=1
+
+# Deploy logging
+openshift_logging_install_logging=false
+openshift_logging_kibana_hostname=logging.apps.redhatlabs.dev
+openshift_logging_use_ops=false
+openshift_logging_master_url=https://kubernetes.default.svc.cluster.local
+openshift_logging_public_master_url=master.redhatlabs.dev
+openshift_logging_curator_default_days=7
+openshift_logging_es_memory_limit=1Gi
+openshift_logging_es_cpu_limit=250m
+openshift_logging_es_pvc_dynamic=true
+openshift_logging_es_pvc_size=10Gi
+openshift_logging_curator_nodeselector={"node-role.kubernetes.io/infra":"true"}
+openshift_logging_es_nodeselector={"node-role.kubernetes.io/infra":"true"}
+openshift_logging_fluentd_nodeselector={"fluentd":"true"}
+openshift_logging_kibana_nodeselector={"node-role.kubernetes.io/infra":"true"}
+
+# Deploy Metrics
+openshift_metrics_install_metrics=false
+openshift_metrics_start_cluster=true
+openshift_metrics_hawkular_hostname=metrics.apps.redhatlabs.dev
+openshift_metrics_cassandra_limits_memory=1Gi
+openshift_metrics_cassandra_requests_cpu=250m
+openshift_metrics_hawkular_replicas=1
+openshift_metrics_hawkular_limits_memory=1Gi
+openshift_metrics_hawkular_limits_cpu=500m
+openshift_metrics_hawkular_requests_memory=768Mi
+openshift_metrics_hawkular_requests_cpu=250m
+openshift_metrics_duration=5
+openshift_metrics_cassandra_storage_type=dynamic
+openshift_metrics_cassandra_pvc_size=10Gi
+openshift_metrics_cassandra_nodeselector={"node-role.kubernetes.io/infra":"true"}
+openshift_metrics_hawkular_nodeselector={"node-role.kubernetes.io/infra":"true"}
+openshift_metrics_heapster_nodeselector={"node-role.kubernetes.io/infra":"true"}
+openshift_metrics_heapster_requests_memory=256Mi
+openshift_metrics_heapster_limits_memory=500Mi
+
+# Deploy Prometheus
+openshift_hosted_prometheus_deploy=false
+openshift_prometheus_node_selector={"node-role.kubernetes.io/infra":"true"}
+
+# Deploy Grafana
+openshift_grafana_state=absent
+openshift_grafana_namespace=openshift-grafana
+openshift_grafana_prometheus_namespace=openshift-metrics
+openshift_grafana_node_selector={"node-role.kubernetes.io/infra":"true"}
+openshift_grafana_storage_type=pvc
+openshift_grafana_pvc_size=2Gi
+
+#Disable add on services
+template_service_broker_install=false
+openshift_enable_service_catalog=false
+
+# host group for masters
+[masters]
+ocp-vm1.syd.iic.ihost.com server_type="master"
+
+# host group for etcd
+[etcd]
+ocp-vm1.syd.iic.ihost.com server_type="etcd"
+
+# host group for nodes, includes region info
+[nodes]
+ocp-vm1.syd.iic.ihost.com openshift_schedulable=True openshift_node_group_name='node-config-master'
+ocp-vm2.syd.iic.ihost.com openshift_schedulable=True openshift_node_group_name='node-config-infra'
+ocp-vm3.syd.iic.ihost.com openshift_schedulable=True openshift_node_group_name='node-config-compute'
+ocp-wvm1.syd.iic.ihost.com openshift_schedulable=True openshift_node_group_name='node-config-compute'

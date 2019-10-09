@@ -1,0 +1,8 @@
+---
+- name: Install OpenShift Packages
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+     - openshift-ansible 
+  tags: install

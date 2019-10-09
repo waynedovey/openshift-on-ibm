@@ -1,0 +1,33 @@
+- name: Ensure this is Red Hat
+  assert:
+    that: "ansible_facts.distribution == 'RedHat'"
+  tags:
+    - rhsm
+
+- name: Inform the operators if both rhsm_activation_key and rhsm_repos are given
+  debug:
+    msg: "rhsm_repos and rhsm_activation_key are exclusive options when using Satellite"
+  when:
+    - rhsm_repos | length > 0
+    - rhsm_activation_key is defined
+    - rhsm_method == 'satellite'
+
+- name: Configure Red Hat Subscription Manager
+  template:
+    src: rhsm.conf.j2
+    dest: /etc/rhsm/rhsm.conf
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - rhsm
+    - rhsm_conf
+
+- block:
+    - include_tasks: "{{ rhsm_method }}.yml"
+  tags:
+    - rhsm
+    - rhsm_register
+    - rhsm_repos
+    - rhsm_satellite
+    - rhsm_unregister

@@ -1,0 +1,20 @@
+---
+- name: Install Packages
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+     - wget 
+     - git 
+     - net-tools  
+     - bind-utils 
+     - yum-utils 
+     - iptables-services 
+     - bridge-utils 
+     - bash-completion s
+     - kexec-tools
+     - sos 
+     - psacct
+     - docker
+     - screen
+  tags: install
