@@ -1,5 +1,5 @@
 
-## update the correct values for the var.yml file 
+## Update the correct values for the var.yml file 
 
 ```bash
 vault_rhsm_user: <rhn_user>
